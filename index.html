@@ -1,0 +1,1367 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>QuizSphere | Ignite Your Knowledge</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&amp;display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+  
+  <style>
+    @layer base {
+      body {
+        font-family: 'Inter', sans-serif;
+        background-color: #0b1326;
+        color: #dae2fd;
+        overflow-x: hidden;
+      }
+    }
+
+    .glass-panel {
+      background: rgba(11, 19, 38, 0.6);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .glass-modal {
+      background: rgba(11, 19, 38, 0.82);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      box-shadow: 0 0 40px rgba(208, 188, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+
+    .glass-card-interactive {
+      background: rgba(30, 41, 59, 0.4);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .glass-card-interactive:hover {
+      border-color: rgba(208, 188, 255, 0.4);
+      background: rgba(30, 41, 59, 0.6);
+      box-shadow: 0 0 25px rgba(208, 188, 255, 0.15);
+      transform: translateY(-4px);
+    }
+
+    .glass-card-interactive:focus-within {
+      border-color: #d0bcff;
+      background: rgba(30, 41, 59, 0.7);
+      box-shadow: 0 0 20px rgba(208, 188, 255, 0.1);
+    }
+
+    .hero-glow {
+      background: radial-gradient(circle at 50% 50%, rgba(208, 188, 255, 0.15) 0%, rgba(11, 19, 38, 0) 70%);
+    }
+
+    .shine-border {
+      position: relative;
+    }
+
+    .shine-border::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      padding: 1px;
+      background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 50%);
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+    }
+
+    .animate-float {
+      animation: float 6s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-15px); }
+    }
+
+    .btn-glow:hover {
+      box-shadow: 0 0 15px rgba(208, 188, 255, 0.4);
+    }
+
+    /* Transition classes for page swapper */
+    .view-section {
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .view-section.hidden {
+      display: none;
+      opacity: 0;
+      transform: scale(0.98);
+    }
+
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "on-secondary": "#003640",
+            "on-background": "#dae2fd",
+            "on-error-container": "#ffdad6",
+            "surface": "#0b1326",
+            "outline": "#958ea0",
+            "surface-container-lowest": "#060e20",
+            "tertiary-fixed": "#ffd9e4",
+            "surface-container-high": "#222a3d",
+            "on-secondary-fixed": "#001f26",
+            "tertiary-fixed-dim": "#ffb0cd",
+            "on-tertiary": "#640039",
+            "on-secondary-fixed-variant": "#004e5c",
+            "surface-bright": "#31394d",
+            "surface-container-low": "#131b2e",
+            "on-surface-variant": "#cbc3d7",
+            "surface-dim": "#0b1326",
+            "on-primary": "#3c0091",
+            "primary-fixed": "#e9ddff",
+            "on-surface": "#dae2fd",
+            "on-primary-fixed-variant": "#5516be",
+            "inverse-surface": "#dae2fd",
+            "primary-fixed-dim": "#d0bcff",
+            "secondary": "#4cd7f6",
+            "on-error": "#690005",
+            "background": "#0b1326",
+            "inverse-primary": "#6d3bd7",
+            "surface-container-highest": "#2d3449",
+            "inverse-on-surface": "#283044",
+            "on-primary-fixed": "#23005c",
+            "secondary-fixed": "#acedff",
+            "surface-tint": "#d0bcff",
+            "on-tertiary-container": "#570032",
+            "on-tertiary-fixed-variant": "#8c0053",
+            "surface-variant": "#2d3449",
+            "on-secondary-container": "#00424e",
+            "primary": "#d0bcff",
+            "tertiary": "#ffb0cd",
+            "error-container": "#93000a",
+            "on-tertiary-fixed": "#3e0022",
+            "secondary-fixed-dim": "#4cd7f6",
+            "primary-container": "#a078ff",
+            "surface-container": "#171f33",
+            "tertiary-container": "#f751a1",
+            "on-primary-container": "#340080",
+            "outline-variant": "#494454",
+            "error": "#ffb4ab",
+            "secondary-container": "#03b5d3"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "unit": "4px",
+            "margin-desktop": "48px",
+            "gutter": "24px",
+            "container-max": "1440px",
+            "margin-mobile": "16px"
+          },
+          "fontFamily": {
+            "body-lg": ["Inter"],
+            "headline-lg": ["Inter"],
+            "headline-md": ["Inter"],
+            "label-md": ["Inter"],
+            "body-sm": ["Inter"],
+            "display-lg-mobile": ["Inter"],
+            "body-md": ["Inter"],
+            "headline-xl": ["Inter"],
+            "display-lg": ["Inter"]
+          },
+          "fontSize": {
+            "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+            "headline-lg": ["30px", {"lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+            "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+            "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+            "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+            "display-lg-mobile": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+            "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+            "headline-xl": ["36px", {"lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+            "display-lg": ["64px", {"lineHeight": "72px", "letterSpacing": "-0.04em", "fontWeight": "800"}]
+          }
+        },
+      },
+    }
+  </script>
+</head>
+<body class="antialiased bg-background text-on-background flex flex-col min-h-screen relative">
+  <!-- Background Glow FX -->
+  <div class="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+    <div class="absolute top-[-10%] right-[-10%] w-[50%] h-[50%] bg-primary/10 blur-[130px] rounded-full transition-transform duration-1000" id="bg-glow-1"></div>
+    <div class="absolute bottom-[-10%] left-[-10%] w-[50%] h-[50%] bg-secondary/8 blur-[130px] rounded-full transition-transform duration-1000" id="bg-glow-2"></div>
+  </div>
+
+  <!-- Top Navigation Bar -->
+  <header class="sticky top-0 w-full bg-surface/60 backdrop-blur-xl z-50 border-b border-white/10 shadow-[0_0_20px_rgba(208,188,255,0.05)]">
+    <nav class="flex justify-between items-center px-margin-mobile md:px-margin-desktop h-20 w-full max-w-[1440px] mx-auto">
+      <a class="flex items-center gap-2 cursor-pointer" onclick="router.navigate('landing')">
+        <span class="material-symbols-outlined text-primary text-3xl">share</span>
+        <span class="font-headline-xl text-headline-xl font-bold bg-clip-text text-transparent bg-gradient-to-b from-primary to-secondary">QuizSphere</span>
+      </a>
+      
+      <!-- Nav Links (Non-authenticated / Guest) -->
+      <div id="nav-guest-links" class="hidden md:flex items-center gap-8">
+        <a class="text-primary font-bold font-label-md text-label-md hover:text-secondary transition-colors" href="#" onclick="router.navigate('landing')">Home</a>
+        <a class="text-on-surface-variant font-label-md text-label-md hover:text-secondary transition-colors" href="#features">Features</a>
+        <a class="text-on-surface-variant font-label-md text-label-md hover:text-secondary transition-colors" href="#pricing">Pricing</a>
+        <a class="text-on-surface-variant font-label-md text-label-md hover:text-secondary transition-colors" href="#" onclick="alert('Join our Discord to connect with 10k+ learners!')">Community</a>
+      </div>
+
+      <!-- Nav Links (Authenticated) -->
+      <div id="nav-user-links" class="hidden md:flex items-center gap-8">
+        <a class="text-on-surface-variant font-label-md text-label-md hover:text-secondary transition-colors" href="#" onclick="router.navigate('dashboard')">Dashboard</a>
+        <a class="text-on-surface-variant font-label-md text-label-md hover:text-secondary transition-colors" href="#" onclick="router.navigate('creator')">Creator Studio</a>
+        <a class="text-on-surface-variant font-label-md text-label-md hover:text-secondary transition-colors" href="#" onclick="router.navigate('analytics')">Analytics Hub</a>
+      </div>
+
+      <div class="flex items-center gap-2 md:gap-4">
+        <!-- Guest controls -->
+        <div id="auth-guest-ctrl" class="flex items-center gap-2">
+          <button class="hidden sm:block px-4 py-2 rounded-xl text-on-surface font-label-md text-label-md hover:bg-white/5 transition-all text-sm" onclick="router.navigate('auth', {mode: 'login'})">Log In</button>
+          <button class="px-4 py-2 md:px-6 bg-gradient-to-b from-primary to-primary-container rounded-xl text-on-primary font-bold shadow-[0_0_20px_rgba(208,188,255,0.3)] active:scale-95 duration-200 text-sm" onclick="router.navigate('auth', {mode: 'signup'})">Sign Up</button>
+        </div>
+
+        <!-- Authenticated controls -->
+        <div id="auth-user-ctrl" class="hidden flex items-center gap-2 md:gap-4">
+          <!-- Mini Profile Widget -->
+          <div class="flex items-center gap-2 md:gap-3 bg-white/5 border border-white/10 px-3 md:px-4 py-1.5 rounded-full">
+            <span class="w-7 h-7 rounded-full bg-gradient-to-tr from-primary to-tertiary flex items-center justify-center text-xs font-bold text-on-primary font-body-sm" id="user-avatar-lbl">U</span>
+            <div class="hidden lg:flex flex-col text-left">
+              <span class="text-xs font-bold leading-none text-on-surface" id="user-name-lbl">User</span>
+              <span class="text-[9px] uppercase font-bold tracking-wider text-secondary mt-0.5" id="user-level-lbl">LV 1</span>
+            </div>
+          </div>
+          <button class="px-3 md:px-4 py-2 border border-white/10 rounded-xl font-label-md text-label-md hover:bg-red-500/10 hover:border-red-500/20 text-on-surface-variant hover:text-red-400 transition-all text-sm" onclick="auth.logout()">Log Out</button>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Main Views Holder -->
+  <main class="flex-grow relative z-10">
+
+    <!-- 1. LANDING VIEW -->
+    <div id="view-landing" class="view-section hero-glow">
+      <section class="relative pt-24 pb-16 md:pt-32 md:pb-32 text-center">
+        <div class="container mx-auto px-margin-mobile md:px-margin-desktop relative z-10">
+
+          <!-- MOBILE-FIRST: Big PIN join box at the very top for students on phones -->
+          <div class="block md:hidden mb-8">
+            <div class="mx-auto max-w-sm p-6 rounded-3xl border-2 border-secondary/40 shadow-[0_0_40px_rgba(76,215,246,0.15)] text-center" style="background: rgba(76,215,246,0.06); backdrop-filter: blur(20px);">
+              <span class="material-symbols-outlined text-secondary text-4xl mb-2 block" style="font-variation-settings: 'FILL' 1;">login</span>
+              <p class="text-base font-bold text-secondary uppercase tracking-widest mb-4">Enter Game PIN to Join</p>
+              <input class="w-full bg-[#020617] border-2 border-secondary/40 rounded-2xl px-4 py-4 text-center font-bold text-2xl tracking-[0.5em] text-on-surface focus:outline-none focus:border-secondary transition-all mb-3" id="join-pin-input" placeholder="000 000" type="text" inputmode="numeric" maxlength="7"/>
+              <button onclick="lobbyEngine.joinPin()" class="w-full py-4 bg-gradient-to-r from-primary to-secondary rounded-2xl text-on-primary font-bold text-lg shadow-[0_0_25px_rgba(76,215,246,0.3)] active:scale-95 duration-200">Join Quiz Now</button>
+              <p class="text-xs text-on-surface-variant mt-3">Get the PIN from your teacher</p>
+            </div>
+            <div class="mt-4 flex gap-3 justify-center">
+              <button onclick="router.navigate('auth', {mode: 'login'})" class="flex-1 max-w-[160px] py-3 glass-panel rounded-xl text-on-surface font-bold text-sm border border-white/10 active:scale-95">Log In</button>
+              <button onclick="router.navigate('auth', {mode: 'signup'})" class="flex-1 max-w-[160px] py-3 bg-gradient-to-b from-primary to-primary-container rounded-xl text-on-primary font-bold text-sm active:scale-95">Sign Up</button>
+            </div>
+          </div>
+
+          <!-- DESKTOP hero (hidden on mobile) -->
+          <div class="hidden md:block">
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-panel border border-white/10 mb-8 animate-bounce">
+              <span class="material-symbols-outlined text-secondary text-sm">bolt</span>
+              <span class="text-label-md font-label-md uppercase tracking-wider text-secondary">Join the Evolution</span>
+            </div>
+            <h1 class="font-display-lg text-display-lg-mobile md:text-display-lg leading-none mb-6">
+              Ignite Your <br/>
+              <span class="bg-clip-text text-transparent bg-gradient-to-r from-primary via-secondary to-tertiary">Knowledge</span>
+            </h1>
+            <p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mx-auto mb-10">
+              The ultimate high-performance quiz platform for professionals, students, and enthusiasts. Compete in real-time, climb leagues, and master any subject with AI-driven insights.
+            </p>
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4 max-w-sm mx-auto sm:max-w-none">
+              <button onclick="router.navigate('auth', {mode: 'signup'})" class="w-full sm:w-auto px-8 py-4 bg-gradient-to-b from-primary to-primary-container rounded-xl text-on-primary font-headline-md text-headline-md font-bold shadow-[0_10px_30px_rgba(208,188,255,0.2)] hover:shadow-[0_10px_40px_rgba(208,188,255,0.4)] transition-all active:scale-95">
+                Get Started for Free
+              </button>
+              <button onclick="alert('Demo video coming soon! Check out the interactive quiz mode immediately by signing up.')" class="w-full sm:w-auto px-8 py-4 glass-panel rounded-xl text-on-surface font-headline-md text-headline-md font-bold hover:bg-white/10 transition-all flex items-center justify-center gap-2">
+                <span class="material-symbols-outlined">play_circle</span>
+                Watch Demo
+              </button>
+            </div>
+            <!-- Desktop PIN joiner -->
+            <div class="mt-10 max-w-xs sm:max-w-sm mx-auto p-5 rounded-2xl glass-panel border border-secondary/20 shadow-lg text-left relative z-20">
+              <p class="text-xs uppercase font-bold text-secondary tracking-widest mb-3 text-center">Enter Room Game Pin</p>
+              <div class="flex gap-2">
+                <input class="flex-grow bg-[#020617] border border-outline-variant/30 rounded-xl px-4 py-2 text-center font-bold text-lg tracking-widest text-on-surface focus:outline-none focus:border-secondary transition-all" id="join-pin-input-desktop" placeholder="000 000" type="text" maxlength="7"/>
+                <button onclick="document.getElementById('join-pin-input').value=document.getElementById('join-pin-input-desktop').value; lobbyEngine.joinPin()" class="px-5 py-2 bg-gradient-to-r from-primary to-secondary rounded-xl text-on-primary font-bold text-sm hover:shadow-[0_0_15px_rgba(76,215,246,0.3)] duration-200">Join</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Dashboard Preview Simulation (hidden on mobile for performance) -->
+        <div class="hidden md:block mt-20 container mx-auto px-margin-mobile md:px-margin-desktop relative">
+          <div class="glass-modal rounded-3xl p-4 md:p-6 border border-white/10 shadow-2xl animate-float">
+            <!-- Simulated dashboard visualization -->
+            <div class="w-full min-h-[300px] md:min-h-[500px] rounded-2xl border border-white/5 bg-gradient-to-br from-surface-container-low to-surface flex flex-col p-6 text-left relative overflow-hidden">
+              <div class="flex justify-between items-center border-b border-white/10 pb-4 mb-6">
+                <div class="flex items-center gap-3">
+                  <span class="w-3 h-3 rounded-full bg-red-500"></span>
+                  <span class="w-3 h-3 rounded-full bg-yellow-500"></span>
+                  <span class="w-3 h-3 rounded-full bg-green-500"></span>
+                  <span class="text-xs font-bold text-on-surface-variant font-label-md ml-2">QuizSphere Portal v2.4</span>
+                </div>
+                <div class="flex items-center gap-4 text-xs">
+                  <span class="text-secondary font-bold font-label-md">PRO LEAGUE ACTIVE</span>
+                  <span class="text-on-surface-variant">Rank #142</span>
+                </div>
+              </div>
+              
+              <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 flex-grow">
+                <div class="lg:col-span-2 space-y-4">
+                  <div class="glass-panel p-5 rounded-2xl">
+                    <h4 class="text-on-surface font-bold text-headline-md mb-2">Welcome Back, Challenger!</h4>
+                    <p class="text-xs text-on-surface-variant">Your daily activity streak is active. Play today's blitz quiz to keep the multiplier going.</p>
+                  </div>
+                  <div class="grid grid-cols-2 gap-4">
+                    <div class="bg-white/5 border border-white/10 p-4 rounded-xl">
+                      <p class="text-[10px] uppercase font-bold tracking-wider text-on-surface-variant">Level Stats</p>
+                      <p class="text-xl font-bold text-primary mt-1">Level 4</p>
+                      <div class="w-full bg-white/10 h-1.5 rounded-full mt-2 overflow-hidden">
+                        <div class="bg-primary h-full w-2/3"></div>
+                      </div>
+                    </div>
+                    <div class="bg-white/5 border border-white/10 p-4 rounded-xl">
+                      <p class="text-[10px] uppercase font-bold tracking-wider text-on-surface-variant">Accuracy Score</p>
+                      <p class="text-xl font-bold text-secondary mt-1">84.2%</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="glass-panel p-5 rounded-2xl flex flex-col justify-between">
+                  <div>
+                    <h5 class="text-xs font-bold uppercase tracking-wider text-on-surface mb-3">Live Global Standings</h5>
+                    <ul class="space-y-2">
+                      <li class="flex items-center justify-between text-xs py-1 border-b border-white/5">
+                        <span class="text-yellow-400">1. Elena R.</span>
+                        <span class="font-bold">15,400 XP</span>
+                      </li>
+                      <li class="flex items-center justify-between text-xs py-1 border-b border-white/5">
+                        <span class="text-slate-300">2. Marcus T.</span>
+                        <span class="font-bold">14,200 XP</span>
+                      </li>
+                      <li class="flex items-center justify-between text-xs py-1 border-b border-white/5">
+                        <span class="text-amber-600">3. Sarah C.</span>
+                        <span class="font-bold">13,800 XP</span>
+                      </li>
+                    </ul>
+                  </div>
+                  <button onclick="router.navigate('auth', {mode: 'signup'})" class="w-full py-2.5 bg-gradient-to-r from-primary to-secondary rounded-xl text-on-primary font-bold text-xs">Play Now</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Floating Widgets in Hero (Simulated for Desktop) -->
+          <div class="hidden lg:block absolute top-1/4 -left-12 glass-modal p-6 rounded-2xl border border-primary/30 w-64 shadow-lg text-left">
+            <div class="flex items-center gap-3 mb-4">
+              <div class="w-10 h-10 rounded-full bg-secondary/20 flex items-center justify-center">
+                <span class="material-symbols-outlined text-secondary">leaderboard</span>
+              </div>
+              <div>
+                <p class="text-label-md font-label-md text-on-surface-variant">Global Rank</p>
+                <p class="text-headline-md font-headline-md font-bold text-on-surface">#142</p>
+              </div>
+            </div>
+            <div class="h-2 w-full bg-surface-container rounded-full overflow-hidden">
+              <div class="h-full bg-secondary w-3/4"></div>
+            </div>
+          </div>
+          <div class="hidden lg:block absolute bottom-1/4 -right-12 glass-modal p-6 rounded-2xl border border-tertiary/30 w-64 shadow-lg text-left">
+            <div class="flex items-center gap-3 mb-4">
+              <div class="w-10 h-10 rounded-full bg-tertiary/20 flex items-center justify-center">
+                <span class="material-symbols-outlined text-tertiary" style="font-variation-settings: 'FILL' 1;">military_tech</span>
+              </div>
+              <div>
+                <p class="text-label-md font-label-md text-on-surface-variant">Weekly Bonus</p>
+                <p class="text-headline-md font-headline-md font-bold text-on-surface">+500 XP</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Stats Section -->
+      <section class="py-20 bg-surface-container-low border-y border-white/5">
+        <div class="container mx-auto px-margin-mobile md:px-margin-desktop grid grid-cols-2 md:grid-cols-4 gap-8">
+          <div class="text-center">
+            <h3 class="text-display-lg-mobile md:text-headline-xl font-display-lg text-primary mb-1">1M+</h3>
+            <p class="text-body-md font-body-md text-on-surface-variant">Active Players</p>
+          </div>
+          <div class="text-center">
+            <h3 class="text-display-lg-mobile md:text-headline-xl font-display-lg text-secondary mb-1">50k+</h3>
+            <p class="text-body-md font-body-md text-on-surface-variant">Verified Quizzes</p>
+          </div>
+          <div class="text-center">
+            <h3 class="text-display-lg-mobile md:text-headline-xl font-display-lg text-tertiary mb-1">120+</h3>
+            <p class="text-body-md font-body-md text-on-surface-variant">Global Leagues</p>
+          </div>
+          <div class="text-center">
+            <h3 class="text-display-lg-mobile md:text-headline-xl font-display-lg text-on-surface mb-1">99.9%</h3>
+            <p class="text-body-md font-body-md text-on-surface-variant">Uptime SLA</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Features Bento Grid -->
+      <section class="py-32 container mx-auto px-margin-mobile md:px-margin-desktop" id="features">
+        <div class="text-center mb-16">
+          <h2 class="font-headline-xl text-headline-xl mb-4 text-on-surface">Precision Built for Performance</h2>
+          <p class="text-body-lg font-body-lg text-on-surface-variant max-w-2xl mx-auto">Master any subject with our suite of advanced features designed for the next generation of learners.</p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-gutter text-left">
+          <!-- Bento Card 1 -->
+          <div class="md:col-span-8 glass-panel rounded-3xl p-8 border border-white/10 hover:border-primary/50 transition-colors group shine-border">
+            <div class="flex flex-col md:flex-row gap-8 items-center">
+              <div class="flex-1">
+                <span class="material-symbols-outlined text-primary text-4xl mb-4" style="font-variation-settings: 'FILL' 1;">bolt</span>
+                <h3 class="font-headline-md text-headline-md mb-3 text-on-surface">Interactive Real-time Quizzes</h3>
+                <p class="font-body-md text-body-md text-on-surface-variant mb-6">Experience zero-latency interactive sessions with live haptic feedback and dynamic question branching based on player skill levels.</p>
+                <ul class="space-y-3">
+                  <li class="flex items-center gap-2 text-on-surface-variant">
+                    <span class="material-symbols-outlined text-primary text-sm">check_circle</span>
+                    AI-Generated Question Paths
+                  </li>
+                  <li class="flex items-center gap-2 text-on-surface-variant">
+                    <span class="material-symbols-outlined text-primary text-sm">check_circle</span>
+                    Live Multiplayer Sync
+                  </li>
+                </ul>
+              </div>
+              <div class="flex-1 w-full h-64 glass-modal rounded-2xl overflow-hidden flex items-center justify-center relative">
+                <div class="absolute inset-0 bg-gradient-to-tr from-primary/10 to-secondary/10"></div>
+                <span class="material-symbols-outlined text-[100px] text-primary/30 animate-pulse">settings_input_antenna</span>
+              </div>
+            </div>
+          </div>
+          <!-- Bento Card 2 -->
+          <div class="md:col-span-4 glass-panel rounded-3xl p-8 border border-white/10 hover:border-secondary/50 transition-colors shine-border flex flex-col justify-between">
+            <div>
+              <span class="material-symbols-outlined text-secondary text-4xl mb-4" style="font-variation-settings: 'FILL' 1;">emoji_events</span>
+              <h3 class="font-headline-md text-headline-md mb-3 text-on-surface">Global Leagues</h3>
+              <p class="font-body-md text-body-md text-on-surface-variant mb-6">Compete in seasonal tournaments and climb from Bronze to Pro Tier. Win exclusive rewards and digital badges.</p>
+            </div>
+            <div class="space-y-3 mt-4">
+              <div class="flex items-center justify-between p-3 rounded-xl bg-white/5 border border-white/5">
+                <span class="text-on-surface text-sm">Pro League</span>
+                <span class="px-2 py-1 bg-secondary/20 text-secondary text-[10px] font-bold rounded-lg uppercase">Active</span>
+              </div>
+              <div class="flex items-center justify-between p-3 rounded-xl bg-white/5 border border-white/5">
+                <span class="text-on-surface text-sm">Master Circuit</span>
+                <span class="px-2 py-1 bg-white/10 text-on-surface-variant text-[10px] font-bold rounded-lg uppercase">Starts in 2d</span>
+              </div>
+            </div>
+          </div>
+          <!-- Bento Card 3 -->
+          <div class="md:col-span-4 glass-panel rounded-3xl p-8 border border-white/10 hover:border-tertiary/50 transition-colors shine-border">
+            <span class="material-symbols-outlined text-tertiary text-4xl mb-4">monitoring</span>
+            <h3 class="font-headline-md text-headline-md mb-3 text-on-surface">Advanced Analytics</h3>
+            <p class="font-body-md text-body-md text-on-surface-variant">Deep dive into your performance with cognitive heatmaps and mastery charts powered by our proprietary brain-engine.</p>
+          </div>
+          <!-- Bento Card 4 -->
+          <div class="md:col-span-8 glass-panel rounded-3xl p-8 border border-white/10 hover:border-on-surface/50 transition-colors flex items-center justify-between shine-border">
+            <div class="max-w-md">
+              <span class="material-symbols-outlined text-primary text-4xl mb-4" style="font-variation-settings: 'FILL' 1;">verified_user</span>
+              <h3 class="font-headline-md text-headline-md mb-3 text-on-surface">Enterprise-Grade Security</h3>
+              <p class="font-body-md text-body-md text-on-surface-variant">Protect your intellectual property with end-to-end encryption and custom SSO integrations for team environments.</p>
+            </div>
+            <div class="hidden sm:flex h-32 w-32 items-center justify-center rounded-full bg-surface-container border border-white/10 flex-shrink-0">
+              <span class="material-symbols-outlined text-primary text-5xl">shield_lock</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Pricing Section -->
+      <section class="py-32 bg-surface-container-lowest" id="pricing">
+        <div class="container mx-auto px-margin-mobile md:px-margin-desktop">
+          <div class="text-center mb-16">
+            <h2 class="font-headline-xl text-headline-xl mb-4 text-on-surface">Simple, Transparent Pricing</h2>
+            <p class="text-body-lg font-body-lg text-on-surface-variant">Unlock the full power of QuizSphere with a plan that fits your ambition.</p>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-gutter max-w-5xl mx-auto text-left">
+            <!-- Basic -->
+            <div class="glass-panel rounded-3xl p-8 border border-white/10 flex flex-col justify-between">
+              <div>
+                <h4 class="text-on-surface-variant font-label-md text-label-md uppercase mb-2">Initiate</h4>
+                <p class="text-display-lg-mobile font-display-lg mb-6">$0<span class="text-body-md text-on-surface-variant font-normal">/mo</span></p>
+                <ul class="space-y-4 mb-10">
+                  <li class="flex items-center gap-2 text-on-surface-variant text-body-md">
+                    <span class="material-symbols-outlined text-primary">check</span>
+                    Unlimited standard quizzes
+                  </li>
+                  <li class="flex items-center gap-2 text-on-surface-variant text-body-md">
+                    <span class="material-symbols-outlined text-primary">check</span>
+                    Global Leaderboard access
+                  </li>
+                  <li class="flex items-center gap-2 text-on-surface-variant text-body-md">
+                    <span class="material-symbols-outlined text-primary">check</span>
+                    Basic performance scores
+                  </li>
+                </ul>
+              </div>
+              <button onclick="router.navigate('auth', {mode: 'signup'})" class="w-full py-3 rounded-xl border border-white/10 hover:bg-white/5 transition-all text-on-surface font-bold mt-auto">Start Free</button>
+            </div>
+            <!-- Pro -->
+            <div class="glass-panel rounded-3xl p-8 border-2 border-primary relative flex flex-col justify-between scale-105 z-10 shadow-[0_0_50px_rgba(208,188,255,0.1)]">
+              <div class="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 bg-primary text-on-primary text-label-md font-bold rounded-full uppercase">Most Popular</div>
+              <div>
+                <h4 class="text-primary font-label-md text-label-md uppercase mb-2">Pro Gamer</h4>
+                <p class="text-display-lg-mobile font-display-lg mb-6">$19<span class="text-body-md text-on-surface-variant font-normal">/mo</span></p>
+                <ul class="space-y-4 mb-10">
+                  <li class="flex items-center gap-2 text-on-surface text-body-md">
+                    <span class="material-symbols-outlined text-primary">check</span>
+                    Custom Quiz Creation
+                  </li>
+                  <li class="flex items-center gap-2 text-on-surface text-body-md">
+                    <span class="material-symbols-outlined text-primary">check</span>
+                    Full Performance Radar Metrics
+                  </li>
+                  <li class="flex items-center gap-2 text-on-surface text-body-md">
+                    <span class="material-symbols-outlined text-primary">check</span>
+                    League progression &amp; Badges
+                  </li>
+                  <li class="flex items-center gap-2 text-on-surface text-body-md">
+                    <span class="material-symbols-outlined text-primary">check</span>
+                    Sound Synthesis Controls
+                  </li>
+                </ul>
+              </div>
+              <button onclick="alert('Purchases are simulated! Log in or Sign up to access all features automatically for free.')" class="w-full py-3 rounded-xl bg-primary text-on-primary font-bold shadow-lg hover:shadow-primary/30 transition-all mt-auto">Go Pro</button>
+            </div>
+            <!-- Enterprise -->
+            <div class="glass-panel rounded-3xl p-8 border border-white/10 flex flex-col justify-between">
+              <div>
+                <h4 class="text-on-surface-variant font-label-md text-label-md uppercase mb-2">Architect</h4>
+                <p class="text-display-lg-mobile font-display-lg mb-6">$99<span class="text-body-md text-on-surface-variant font-normal">/mo</span></p>
+                <ul class="space-y-4 mb-10">
+                  <li class="flex items-center gap-2 text-on-surface-variant text-body-md">
+                    <span class="material-symbols-outlined text-primary">check</span>
+                    Team collaboration workspaces
+                  </li>
+                  <li class="flex items-center gap-2 text-on-surface-variant text-body-md">
+                    <span class="material-symbols-outlined text-primary">check</span>
+                    Custom Branding &amp; API keys
+                  </li>
+                  <li class="flex items-center gap-2 text-on-surface-variant text-body-md">
+                    <span class="material-symbols-outlined text-primary">check</span>
+                    SSO &amp; Advanced enterprise logs
+                  </li>
+                </ul>
+              </div>
+              <button onclick="alert('Contact sales: sales@quizsphere.com')" class="w-full py-3 rounded-xl border border-white/10 hover:bg-white/5 transition-all text-on-surface font-bold mt-auto">Contact Sales</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Testimonials -->
+      <section class="py-32">
+        <div class="container mx-auto px-margin-mobile md:px-margin-desktop">
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter text-left">
+            <div class="glass-panel p-8 rounded-3xl border border-white/10 shine-border">
+              <div class="flex items-center gap-4 mb-6">
+                <div class="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center">
+                  <span class="material-symbols-outlined text-primary">person</span>
+                </div>
+                <div>
+                  <p class="text-on-surface font-bold">Sarah Chen</p>
+                  <p class="text-label-md text-on-surface-variant">Product Manager</p>
+                </div>
+              </div>
+              <p class="text-body-md text-on-surface-variant italic">"QuizSphere transformed how we handle internal training. The real-time engagement levels are off the charts compared to anything else we've tried."</p>
+            </div>
+            <div class="glass-panel p-8 rounded-3xl border border-white/10 shine-border mt-8 md:mt-0">
+              <div class="flex items-center gap-4 mb-6">
+                <div class="w-12 h-12 rounded-full bg-secondary/20 flex items-center justify-center">
+                  <span class="material-symbols-outlined text-secondary">person</span>
+                </div>
+                <div>
+                  <p class="text-on-surface font-bold">Marcus Thorne</p>
+                  <p class="text-label-md text-on-surface-variant">Senior Dev</p>
+                </div>
+              </div>
+              <p class="text-body-md text-on-surface-variant italic">"The client-side performance is a dream. The transitions are super clean and the audio feedback adds an immersive gamified layer."</p>
+            </div>
+            <div class="glass-panel p-8 rounded-3xl border border-white/10 shine-border mt-16 lg:mt-0">
+              <div class="flex items-center gap-4 mb-6">
+                <div class="w-12 h-12 rounded-full bg-tertiary/20 flex items-center justify-center">
+                  <span class="material-symbols-outlined text-tertiary">person</span>
+                </div>
+                <div>
+                  <p class="text-on-surface font-bold">Elena Rodriguez</p>
+                  <p class="text-label-md text-on-surface-variant">Master Rank Player</p>
+                </div>
+              </div>
+              <p class="text-body-md text-on-surface-variant italic">"The UI is gorgeous and the competitive scene is fierce. I've spent hundreds of hours in the global leagues and I'm still coming back for more."</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Final CTA -->
+      <section class="py-32 relative overflow-hidden">
+        <div class="container mx-auto px-margin-mobile md:px-margin-desktop text-center relative z-10">
+          <div class="glass-modal max-w-4xl mx-auto p-12 md:p-20 rounded-[40px] border border-white/10 shine-border">
+            <h2 class="font-display-lg text-display-lg-mobile md:text-headline-xl mb-6 text-on-surface">Ready to Spherehead <br/> Your Learning?</h2>
+            <p class="text-body-lg text-body-lg text-on-surface-variant mb-10 max-w-xl mx-auto">Join 1 million+ players and start your journey today. No credit card required.</p>
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4 max-w-sm mx-auto sm:max-w-none">
+              <button onclick="router.navigate('auth', {mode: 'signup'})" class="w-full sm:w-auto px-10 py-4 bg-gradient-to-b from-primary to-primary-container rounded-xl text-on-primary font-bold text-lg active:scale-95 duration-200 shadow-2xl">Create Free Account</button>
+              <button onclick="router.navigate('auth', {mode: 'login'})" class="w-full sm:w-auto px-10 py-4 glass-panel rounded-xl text-on-surface font-bold text-lg hover:bg-white/10 transition-all border border-white/10">Log In to Account</button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- 2. AUTHENTICATION VIEW -->
+    <div id="view-auth" class="view-section hidden flex items-center justify-center min-h-[80vh] py-12">
+      <div class="glass-panel p-8 rounded-2xl w-full max-w-[440px] shadow-2xl relative">
+        <!-- Close button -->
+        <button onclick="router.navigate('landing')" class="absolute top-4 right-4 text-on-surface-variant hover:text-on-surface">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+
+        <div class="flex flex-col items-center mb-8">
+          <div class="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-4 relative">
+            <div class="absolute inset-0 bg-primary/5 rounded-full animate-pulse"></div>
+            <span class="material-symbols-outlined text-[36px] text-primary">share</span>
+          </div>
+          <h2 id="auth-title" class="font-headline-xl text-headline-xl font-bold bg-clip-text text-transparent bg-gradient-to-b from-primary to-secondary">QuizSphere</h2>
+          <p id="auth-subtitle" class="font-body-sm text-body-sm text-on-surface-variant mt-2 text-center">Step into the arena. Test your knowledge.</p>
+        </div>
+
+        <form id="auth-form" class="space-y-5" onsubmit="auth.handleSubmit(event)">
+          <!-- Name Field (Only visible on Sign Up) -->
+          <div id="auth-field-name" class="space-y-2">
+            <label class="font-label-md text-label-md text-on-surface-variant px-1 uppercase tracking-wider" for="auth-name">Your Nickname</label>
+            <div class="relative">
+              <input class="w-full bg-[#020617] border border-outline-variant/30 rounded-lg px-12 py-3 text-on-surface focus:outline-none focus:border-secondary transition-all duration-300 font-body-md text-body-md" id="auth-name" placeholder="Challenger1" type="text"/>
+              <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant text-[20px]">person</span>
+            </div>
+          </div>
+
+          <!-- Email Field -->
+          <div class="space-y-2">
+            <label class="font-label-md text-label-md text-on-surface-variant px-1 uppercase tracking-wider" for="auth-email">Email Address</label>
+            <div class="relative">
+              <input class="w-full bg-[#020617] border border-outline-variant/30 rounded-lg px-12 py-3 text-on-surface focus:outline-none focus:border-secondary transition-all duration-300 font-body-md text-body-md" id="auth-email" placeholder="challenger@example.com" required type="email"/>
+              <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant text-[20px]">mail</span>
+            </div>
+          </div>
+
+          <!-- Password Field -->
+          <div class="space-y-2">
+            <div class="flex justify-between items-center px-1">
+              <label class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider" for="auth-password">Password</label>
+              <a class="font-label-md text-label-md text-primary hover:text-secondary transition-colors duration-200" href="#" onclick="alert('Since this is a simulated sandbox, passwords can be reset by registering again.')">Forgot?</a>
+            </div>
+            <div class="relative">
+              <input class="w-full bg-[#020617] border border-outline-variant/30 rounded-lg px-12 py-3 text-on-surface focus:outline-none focus:border-secondary transition-all duration-300 font-body-md text-body-md" id="auth-password" placeholder="••••••••" required type="password"/>
+              <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant text-[20px]">lock</span>
+              <button class="absolute right-4 top-1/2 -translate-y-1/2 text-on-surface-variant hover:text-primary transition-colors" type="button" onclick="auth.togglePasswordVisibility()">
+                <span class="material-symbols-outlined text-[20px]" id="auth-password-vis-icon">visibility</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Submit Button -->
+          <button id="auth-submit-btn" class="w-full bg-gradient-to-b from-primary to-primary-container text-on-primary-container font-headline-md text-headline-md py-3.5 rounded-xl font-bold btn-glow transition-all active:scale-[0.98] duration-200 shadow-lg mt-2" type="submit">
+            Login
+          </button>
+          
+          <!-- Divider -->
+          <div class="relative flex items-center py-2">
+            <div class="flex-grow border-t border-white/10"></div>
+            <span class="flex-shrink mx-4 font-label-md text-label-md text-on-surface-variant">OR CONTINUE WITH</span>
+            <div class="flex-grow border-t border-white/10"></div>
+          </div>
+
+          <!-- Social Logins -->
+          <div class="grid grid-cols-2 gap-4">
+            <button onclick="auth.socialLogin('Google')" class="glass-card-interactive flex items-center justify-center gap-3 py-2.5 rounded-xl hover:bg-white/5 active:scale-95 transition-all text-xs" type="button">
+              <span class="material-symbols-outlined text-red-400 text-[18px]">g_mobiledata</span>
+              <span class="font-label-md text-label-md">Google</span>
+            </button>
+            <button onclick="auth.socialLogin('GitHub')" class="glass-card-interactive flex items-center justify-center gap-3 py-2.5 rounded-xl hover:bg-white/5 active:scale-95 transition-all text-xs" type="button">
+              <span class="material-symbols-outlined text-white text-[18px]">terminal</span>
+              <span class="font-label-md text-label-md">GitHub</span>
+            </button>
+          </div>
+        </form>
+
+        <!-- Toggle Auth mode -->
+        <div class="mt-8 text-center">
+          <p class="font-body-sm text-body-sm text-on-surface-variant">
+            <span id="auth-toggle-msg">New to QuizSphere?</span>
+            <a id="auth-toggle-link" class="text-primary font-bold hover:text-secondary transition-colors underline underline-offset-4 ml-1 cursor-pointer" onclick="auth.toggleMode()">Sign up</a>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. PLAYER DASHBOARD VIEW -->
+    <div id="view-dashboard" class="view-section hidden container mx-auto px-margin-mobile md:px-margin-desktop py-10 max-w-[1200px]">
+      <!-- Dashboard Header Stats -->
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10 text-left">
+        <div class="glass-panel p-5 rounded-2xl border border-primary/20 shadow-lg relative overflow-hidden">
+          <p class="text-label-md font-label-md text-on-surface-variant uppercase tracking-wider">Level Status</p>
+          <div class="flex items-baseline gap-2 mt-2">
+            <span class="text-3xl font-bold text-primary" id="dash-stat-level">Level 1</span>
+            <span class="text-xs text-on-surface-variant" id="dash-stat-xp-ratio">0/1000 XP</span>
+          </div>
+          <div class="w-full bg-white/5 h-2 rounded-full mt-3 overflow-hidden">
+            <div class="h-full bg-gradient-to-r from-primary to-secondary transition-all duration-500" style="width: 0%" id="dash-stat-xp-bar"></div>
+          </div>
+        </div>
+
+        <div class="glass-panel p-5 rounded-2xl border border-secondary/20 shadow-lg">
+          <p class="text-label-md font-label-md text-on-surface-variant uppercase tracking-wider">Global Standings</p>
+          <div class="flex items-baseline gap-2 mt-2">
+            <span class="text-3xl font-bold text-secondary">#142</span>
+            <span class="text-xs text-on-surface-variant">Active Tier</span>
+          </div>
+          <div class="text-[10px] uppercase font-bold text-secondary mt-3">PRO PLAYER TIER</div>
+        </div>
+
+        <div class="glass-panel p-5 rounded-2xl border border-tertiary/20 shadow-lg">
+          <p class="text-label-md font-label-md text-on-surface-variant uppercase tracking-wider">Weekly Score</p>
+          <div class="flex items-baseline gap-2 mt-2">
+            <span class="text-3xl font-bold text-tertiary" id="dash-stat-accuracy">0%</span>
+            <span class="text-xs text-on-surface-variant">Avg Accuracy</span>
+          </div>
+          <div class="text-[10px] uppercase font-bold text-tertiary mt-3" id="dash-stat-quizzes-played">0 Quizzes played</div>
+        </div>
+
+        <div class="glass-panel p-5 rounded-2xl border border-white/10 shadow-lg flex flex-col justify-between">
+          <div>
+            <p class="text-label-md font-label-md text-on-surface-variant uppercase tracking-wider">Quiz Studio</p>
+            <p class="text-sm font-bold text-on-surface mt-2">Create custom challenges</p>
+          </div>
+          <button onclick="router.navigate('creator')" class="w-full py-1.5 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-xs text-on-surface font-bold mt-3 transition-all">
+            Launch Creator
+          </button>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 text-left">
+        <!-- Main Quizzes List Area -->
+        <div class="lg:col-span-2 space-y-8">
+          
+          <!-- Seeding categories of Quizzes -->
+          <div>
+            <h3 class="font-headline-md text-headline-md text-on-surface mb-4 flex items-center gap-2">
+              <span class="material-symbols-outlined text-primary">school</span>
+              Standard Arena Quizzes
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="standard-quiz-grid">
+              <!-- Dynamically populated in app.js -->
+            </div>
+          </div>
+
+          <!-- Custom User-created Quizzes -->
+          <div>
+            <h3 class="font-headline-md text-headline-md text-on-surface mb-4 flex items-center gap-2">
+              <span class="material-symbols-outlined text-secondary">handyman</span>
+              Your Custom Studio Quizzes
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="custom-quiz-grid">
+              <!-- Dynamically populated in app.js -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Side Panel: Leagues and Leaderboard -->
+        <div class="space-y-8">
+          <!-- Active Leagues progress -->
+          <div class="glass-panel p-6 rounded-3xl border border-white/10 relative overflow-hidden">
+            <h4 class="font-headline-md text-headline-md text-on-surface mb-4">Competitions</h4>
+            <div class="space-y-4">
+              <div class="bg-white/5 border border-white/10 p-4 rounded-2xl relative">
+                <div class="flex justify-between items-center mb-2">
+                  <span class="text-xs font-bold uppercase tracking-wider text-secondary">Pro League Tier</span>
+                  <span class="px-2 py-0.5 bg-secondary/20 text-secondary text-[9px] font-bold rounded-lg uppercase">Active</span>
+                </div>
+                <p class="text-xs text-on-surface-variant">Climb past the promotion cut-off line (Top 10 players) before Monday's server sync.</p>
+                <div class="w-full bg-white/5 h-1.5 rounded-full mt-3 overflow-hidden">
+                  <div class="h-full bg-secondary" style="width: 75%"></div>
+                </div>
+                <div class="flex justify-between text-[9px] text-on-surface-variant font-bold mt-1 uppercase">
+                  <span>Current rank: #142</span>
+                  <span>Cut-off: #20</span>
+                </div>
+              </div>
+              <div class="bg-white/5 border border-white/5 p-4 rounded-2xl opacity-50">
+                <div class="flex justify-between items-center mb-1">
+                  <span class="text-xs font-bold uppercase tracking-wider text-on-surface-variant">Master Circuit</span>
+                  <span class="px-2 py-0.5 bg-white/10 text-on-surface-variant text-[9px] font-bold rounded-lg uppercase">Locked</span>
+                </div>
+                <p class="text-[10px] text-on-surface-variant">Unlock automatically once you reach Global rank #20 or higher.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Live Leaderboard widget -->
+          <div class="glass-panel p-6 rounded-3xl border border-white/10">
+            <h4 class="font-headline-md text-headline-md text-on-surface mb-4 flex items-center justify-between">
+              <span>Top Players</span>
+              <span class="text-[10px] text-secondary font-bold uppercase tracking-widest">LIVE SYNC</span>
+            </h4>
+            <div class="space-y-3" id="leaderboard-list">
+              <!-- Dynamically populated in app.js -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. ACTIVE QUIZ PLAY VIEW -->
+    <div id="view-quiz" class="view-section hidden container mx-auto px-margin-mobile md:px-margin-desktop py-12 max-w-[720px] text-center">
+      <!-- Quiz Header Area -->
+      <div class="flex justify-between items-center mb-8 text-left bg-white/5 border border-white/10 px-6 py-4 rounded-2xl">
+        <div>
+          <h3 id="quiz-run-title" class="text-lg font-bold text-on-surface leading-tight">Quiz Title</h3>
+          <span id="quiz-run-q-index" class="text-xs text-on-surface-variant font-label-md mt-1 block">Question 1 of 10</span>
+        </div>
+        <!-- Circular countdown timer container -->
+        <div class="relative w-16 h-16 flex items-center justify-center bg-background rounded-full border border-white/10 shadow-[0_0_15px_rgba(76,215,246,0.1)]">
+          <svg class="absolute inset-0 w-full h-full -rotate-90">
+            <circle class="text-white/10" stroke-width="3" stroke="currentColor" fill="transparent" r="26" cx="32" cy="32"/>
+            <circle class="text-secondary transition-all duration-1000" id="quiz-timer-svg-circle" stroke-width="3" stroke-dasharray="163.36" stroke-dashoffset="0" stroke-linecap="round" stroke="currentColor" fill="transparent" r="26" cx="32" cy="32"/>
+          </svg>
+          <span id="quiz-run-timer" class="text-sm font-bold text-secondary relative z-10 font-label-md">15</span>
+        </div>
+      </div>
+
+      <!-- Question display card -->
+      <div class="glass-modal rounded-3xl p-8 border border-white/10 shadow-2xl text-left relative overflow-hidden mb-6">
+        <!-- Floating details line -->
+        <div class="w-full bg-white/5 h-1.5 rounded-full mb-6 overflow-hidden">
+          <div id="quiz-run-progress-bar" class="h-full bg-gradient-to-r from-primary to-secondary transition-all duration-300" style="width: 10%"></div>
+        </div>
+        <p id="quiz-run-question-text" class="text-lg md:text-xl font-bold text-on-surface mb-8 leading-relaxed">
+          Which HTML5 tag is used to specify a footer for a document or section?
+        </p>
+
+        <!-- Options Container -->
+        <div class="grid grid-cols-1 gap-4" id="quiz-run-options-grid">
+          <!-- Populated in app.js -->
+        </div>
+      </div>
+
+      <!-- Footer Buttons -->
+      <div class="flex justify-between items-center">
+        <button onclick="quizEngine.exit()" class="px-6 py-3 border border-white/10 rounded-xl text-on-surface-variant font-bold text-sm hover:bg-red-500/10 hover:border-red-500/20 hover:text-red-400 transition-all flex items-center gap-2">
+          <span class="material-symbols-outlined text-sm">exit_to_app</span>
+          Exit Quiz
+        </button>
+        <button id="quiz-run-next-btn" onclick="quizEngine.nextQuestion()" class="px-8 py-3 bg-gradient-to-b from-primary to-primary-container text-on-primary font-bold text-sm rounded-xl active:scale-95 duration-200 shadow-lg hidden">
+          Next Question
+        </button>
+      </div>
+
+      <!-- Results view template overlay, shown at final question -->
+      <div id="quiz-results-container" class="hidden fixed inset-0 z-50 bg-background/95 flex items-center justify-center p-4">
+        <div class="glass-modal max-w-lg w-full p-8 rounded-3xl border border-white/15 text-center shadow-2xl relative max-h-[90vh] overflow-y-auto">
+          <!-- Canvas confetti dynamic element -->
+          <canvas id="quiz-results-confetti" class="absolute inset-0 pointer-events-none w-full h-full rounded-3xl"></canvas>
+
+          <span class="material-symbols-outlined text-6xl text-primary animate-bounce mb-4" id="results-icon">emoji_events</span>
+          <h2 class="font-headline-xl text-headline-xl text-on-surface mb-2" id="results-title">Quiz Completed!</h2>
+          <p class="text-sm text-on-surface-variant mb-6" id="results-subtitle">Excellent job, challenger! Here are your performance statistics.</p>
+          
+          <div class="grid grid-cols-3 gap-4 mb-6">
+            <div class="bg-white/5 border border-white/10 p-3 rounded-xl">
+              <span class="text-[9px] uppercase font-bold text-on-surface-variant tracking-wider">Score</span>
+              <p class="text-lg font-bold text-secondary mt-1" id="results-score">+0 XP</p>
+            </div>
+            <div class="bg-white/5 border border-white/10 p-3 rounded-xl">
+              <span class="text-[9px] uppercase font-bold text-on-surface-variant tracking-wider">Accuracy</span>
+              <p class="text-lg font-bold text-primary mt-1" id="results-acc">0%</p>
+            </div>
+            <div class="bg-white/5 border border-white/10 p-3 rounded-xl">
+              <span class="text-[9px] uppercase font-bold text-on-surface-variant tracking-wider">Accuracy Rank</span>
+              <p class="text-lg font-bold text-tertiary mt-1" id="results-status">Silver</p>
+            </div>
+          </div>
+
+          <!-- Score Breakdowns Scroll view -->
+          <div class="bg-[#020617] border border-white/5 rounded-xl p-4 text-left space-y-2 mb-6 max-h-48 overflow-y-auto" id="results-breakdown-list">
+            <!-- Populated dynamically in app.js -->
+          </div>
+
+          <div class="flex gap-4">
+            <button onclick="quizEngine.exit()" class="flex-1 py-3 border border-white/10 rounded-xl font-bold text-sm text-on-surface hover:bg-white/5 transition-all">
+              Dashboard
+            </button>
+            <button onclick="quizEngine.replay()" class="flex-1 py-3 bg-gradient-to-r from-primary to-secondary text-on-primary font-bold text-sm rounded-xl">
+              Play Again
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. CREATOR STUDIO VIEW -->
+    <div id="view-creator" class="view-section hidden container mx-auto px-margin-mobile md:px-margin-desktop py-10 max-w-[800px] text-left">
+      <div class="flex justify-between items-center mb-8 border-b border-white/10 pb-4">
+        <div>
+          <h2 class="font-headline-xl text-headline-xl text-on-surface font-bold flex items-center gap-2">
+            <span class="material-symbols-outlined text-primary text-3xl">handyman</span>
+            Quiz Creator Studio
+          </h2>
+          <p class="text-sm text-on-surface-variant mt-1">Design high-performance custom quizzes. Saved to your local client library.</p>
+        </div>
+        <button onclick="router.navigate('dashboard')" class="px-4 py-2 border border-white/10 hover:bg-white/5 text-xs font-bold rounded-xl transition-all">
+          Exit Studio
+        </button>
+      </div>
+
+      <div class="glass-panel p-6 md:p-8 rounded-3xl border border-white/10 shadow-xl space-y-6">
+        <!-- Part 1: General quiz details -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 pb-6 border-b border-white/5">
+          <div class="md:col-span-2 space-y-2">
+            <label class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider" for="create-title">Quiz Title</label>
+            <input class="w-full bg-[#020617] border border-outline-variant/30 rounded-lg px-4 py-2.5 text-on-surface focus:outline-none focus:border-secondary transition-all" id="create-title" placeholder="e.g. JavaScript Frameworks Masterclass" required type="text"/>
+          </div>
+          <div class="space-y-2">
+            <label class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider" for="create-category">Subject Area</label>
+            <select class="w-full bg-[#020617] border border-outline-variant/30 rounded-lg px-4 py-2.5 text-on-surface focus:outline-none focus:border-secondary transition-all font-body-md text-body-md" id="create-category">
+              <option value="Technology">Technology</option>
+              <option value="Science">Science</option>
+              <option value="History">History</option>
+              <option value="Geography">Geography</option>
+              <option value="Other">Other Category</option>
+            </select>
+          </div>
+          <div class="space-y-2">
+            <div class="flex justify-between items-center">
+              <label class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider" for="create-pin">Game PIN</label>
+              <button type="button" onclick="creatorStudio.hostLiveQuiz()" class="text-[11px] px-3 py-1 bg-primary/20 text-primary hover:bg-primary/40 rounded-lg font-bold uppercase transition-colors">Host Live Quiz</button>
+            </div>
+            <input class="w-full bg-[#020617] border border-outline-variant/30 rounded-lg px-4 py-2.5 text-on-surface focus:outline-none focus:border-secondary transition-all font-mono text-center tracking-widest text-body-md" id="create-pin" placeholder="Generated automatically" readonly type="text"/>
+          </div>
+        </div>
+
+        <!-- QR Code Share Panel (appears when PIN is set) -->
+        <div id="create-qr-panel" class="hidden pb-6 border-b border-white/5 space-y-6">
+          
+          <!-- Tunnel URL Setup -->
+          <div class="bg-primary/5 border border-primary/20 rounded-2xl p-4 flex flex-col md:flex-row items-center gap-4">
+            <div class="flex-1">
+              <label class="font-label-md text-primary uppercase tracking-wider mb-1 block">Public Tunnel URL</label>
+              <input type="text" id="create-public-url-input" placeholder="e.g. https://your-tunnel.lhr.life" class="w-full bg-[#020617] border border-primary/30 rounded-lg px-4 py-2 text-on-surface text-sm focus:outline-none focus:border-primary" />
+            </div>
+            <button onclick="creatorStudio.setPublicUrl()" class="px-6 py-2 bg-primary text-on-primary font-bold rounded-xl mt-5 md:mt-0 active:scale-95 transition-all text-sm shadow-[0_0_15px_rgba(76,215,246,0.3)]">Set URL</button>
+          </div>
+
+          <div class="flex flex-col sm:flex-row gap-5 items-center p-5 rounded-2xl border border-secondary/30" style="background: rgba(76,215,246,0.05);">
+            <!-- QR Code -->
+            <div class="shrink-0 text-center">
+              <div class="relative inline-block">
+                <img id="create-qr-img" src="" alt="QR Code" class="w-40 h-40 rounded-xl border-4 border-secondary/30 bg-white p-1 shadow-[0_0_30px_rgba(76,215,246,0.2)]" />
+              </div>
+              <p class="text-[10px] text-secondary mt-2 font-bold uppercase tracking-wider">📱 Students Scan This</p>
+            </div>
+            <!-- Info -->
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center gap-3 mb-3">
+                <span class="text-3xl font-mono font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary tracking-widest" id="create-qr-pin-display">------</span>
+                <span class="text-xs text-secondary font-bold uppercase tracking-wider">Your PIN</span>
+              </div>
+              <p class="text-xs text-on-surface-variant mb-3">Share the QR code or the link below with your students. They scan it on any phone to join!</p>
+              <div class="flex gap-2">
+                <input id="create-share-url" readonly class="flex-1 bg-[#020617] border border-white/10 rounded-xl px-3 py-2.5 text-xs font-mono text-secondary truncate focus:outline-none" value="" />
+                <button onclick="creatorStudio.copyShareUrl()" class="px-4 py-2.5 bg-gradient-to-r from-primary to-secondary rounded-xl text-on-primary text-xs font-bold shrink-0 active:scale-95 transition-all">Copy Link</button>
+              </div>
+              <p class="text-[11px] text-on-surface-variant mt-2">💡 Students open the link → PIN is auto-filled → they tap Join!</p>
+            </div>
+          </div>
+
+          <!-- Live Leaderboard Panel -->
+          <div class="bg-[#020617] border border-white/5 rounded-2xl p-6 text-left shadow-lg">
+            <div class="flex justify-between items-center mb-4 border-b border-white/10 pb-3">
+              <span class="text-sm font-bold uppercase tracking-wider text-on-surface flex items-center gap-2">
+                <span class="material-symbols-outlined text-primary text-lg">groups</span> Lobby & Leaderboard
+              </span>
+              <span class="text-[10px] bg-primary/20 text-primary px-2 py-1 font-bold uppercase tracking-widest rounded-lg animate-pulse" id="creator-lobby-status">Waiting for students...</span>
+            </div>
+            
+            <div id="create-live-leaderboard" class="space-y-2 max-h-60 overflow-y-auto mb-4">
+              <p class="text-xs text-on-surface-variant italic text-center py-4">Waiting for students to join...</p>
+            </div>
+            
+            <div class="flex justify-between items-center border-t border-white/10 pt-4">
+              <button onclick="creatorStudio.startLiveQuizForAll()" id="creator-start-live-btn" class="px-6 py-3 bg-gradient-to-r from-green-400 to-emerald-600 text-white font-bold rounded-xl active:scale-95 transition-all w-full text-sm shadow-[0_0_20px_rgba(52,211,153,0.3)] disabled:opacity-50 disabled:cursor-not-allowed">
+                START QUIZ FOR ALL STUDENTS
+              </button>
+            </div>
+            <div class="mt-4 text-right">
+              <button onclick="creatorStudio.clearLeaderboard()" class="px-4 py-2 border border-red-500/30 text-red-400 hover:bg-red-500/10 text-[10px] font-bold rounded-lg transition-all uppercase tracking-wider">Clear LOBBY / SCORES</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Part 2: Questions list builder -->
+        <div class="space-y-4">
+          <div class="flex justify-between items-center">
+            <h4 class="font-headline-md text-headline-md text-on-surface">Quiz Questions</h4>
+            <span class="text-xs text-on-surface-variant" id="create-q-count">Total: 0 questions added</span>
+          </div>
+
+          <div id="create-questions-container" class="space-y-4 max-h-96 overflow-y-auto pr-2">
+            <!-- Render dynamic list of questions added -->
+            <p id="create-empty-questions-msg" class="text-xs text-on-surface-variant py-8 text-center italic border border-dashed border-white/10 rounded-2xl">
+              No questions added yet. Use the tool below to define a question card.
+            </p>
+          </div>
+        </div>
+
+        <!-- Part 3: Live interactive builder inputs -->
+        <div class="bg-[#020617] border border-white/5 p-6 rounded-2xl space-y-4 mt-6">
+          <h5 class="text-xs font-bold uppercase tracking-wider text-secondary flex items-center gap-2">
+            <span class="material-symbols-outlined text-sm">add_circle</span>
+            Add Question Card
+          </h5>
+          
+          <div class="space-y-2">
+            <label class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider" for="create-q-text">Question Prompt</label>
+            <input class="w-full bg-background border border-white/10 rounded-lg px-4 py-2.5 text-on-surface focus:outline-none focus:border-secondary transition-all" id="create-q-text" placeholder="e.g. Which of the following is not a javascript reserved keyword?" type="text"/>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="space-y-2">
+              <label class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider" for="create-opt-a">Option A</label>
+              <input class="w-full bg-background border border-white/10 rounded-lg px-4 py-2.5 text-on-surface focus:outline-none focus:border-secondary transition-all text-xs" id="create-opt-a" placeholder="Option A prompt" type="text"/>
+            </div>
+            <div class="space-y-2">
+              <label class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider" for="create-opt-b">Option B</label>
+              <input class="w-full bg-background border border-white/10 rounded-lg px-4 py-2.5 text-on-surface focus:outline-none focus:border-secondary transition-all text-xs" id="create-opt-b" placeholder="Option B prompt" type="text"/>
+            </div>
+            <div class="space-y-2">
+              <label class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider" for="create-opt-c">Option C</label>
+              <input class="w-full bg-background border border-white/10 rounded-lg px-4 py-2.5 text-on-surface focus:outline-none focus:border-secondary transition-all text-xs" id="create-opt-c" placeholder="Option C prompt" type="text"/>
+            </div>
+            <div class="space-y-2">
+              <label class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider" for="create-opt-d">Option D</label>
+              <input class="w-full bg-background border border-white/10 rounded-lg px-4 py-2.5 text-on-surface focus:outline-none focus:border-secondary transition-all text-xs" id="create-opt-d" placeholder="Option D prompt" type="text"/>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+            <div class="space-y-2">
+              <label class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider" for="create-correct-opt">Correct Answer Option</label>
+              <select class="w-full bg-background border border-white/10 rounded-lg px-4 py-2.5 text-on-surface focus:outline-none focus:border-secondary transition-all text-xs" id="create-correct-opt">
+                <option value="A">Option A</option>
+                <option value="B">Option B</option>
+                <option value="C">Option C</option>
+                <option value="D">Option D</option>
+              </select>
+            </div>
+            <div class="space-y-2">
+              <label class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider" for="create-timer">Time Limit (Seconds)</label>
+              <select class="w-full bg-background border border-white/10 rounded-lg px-4 py-2.5 text-on-surface focus:outline-none focus:border-secondary transition-all text-xs" id="create-timer">
+                <option value="10">10 Seconds (Fast)</option>
+                <option value="15" selected>15 Seconds (Normal)</option>
+                <option value="20">20 Seconds (Relaxed)</option>
+                <option value="30">30 Seconds (Extended)</option>
+              </select>
+            </div>
+          </div>
+
+          <button onclick="creatorStudio.addQuestion()" class="w-full py-2.5 border border-dashed border-secondary hover:bg-secondary/10 hover:border-secondary transition-all text-secondary font-bold text-xs rounded-xl flex items-center justify-center gap-2 mt-4">
+            <span class="material-symbols-outlined text-sm">add</span>
+            Add Question to Quiz
+          </button>
+        </div>
+
+        <!-- Form controls -->
+        <div class="flex gap-4 pt-6 border-t border-white/5">
+          <button onclick="creatorStudio.reset()" class="flex-1 py-3 border border-white/10 rounded-xl font-bold text-sm text-on-surface hover:bg-white/5 transition-all">
+            Reset Studio
+          </button>
+          <button onclick="creatorStudio.saveQuiz()" class="flex-1 py-3 bg-gradient-to-r from-primary to-secondary text-on-primary font-bold text-sm rounded-xl hover:shadow-[0_0_20px_rgba(208,188,255,0.2)]">
+            Publish &amp; Save Quiz
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6. PERFORMANCE ANALYTICS VIEW -->
+    <div id="view-analytics" class="view-section hidden container mx-auto px-margin-mobile md:px-margin-desktop py-10 max-w-[1000px] text-left">
+      <div class="flex justify-between items-center mb-8 border-b border-white/10 pb-4">
+        <div>
+          <h2 class="font-headline-xl text-headline-xl text-on-surface font-bold flex items-center gap-2">
+            <span class="material-symbols-outlined text-tertiary text-3xl">monitoring</span>
+            Performance Analytics
+          </h2>
+          <p class="text-sm text-on-surface-variant mt-1">Deep dive metrics and accuracy insights calculated across your history.</p>
+        </div>
+        <button onclick="router.navigate('dashboard')" class="px-4 py-2 border border-white/10 hover:bg-white/5 text-xs font-bold rounded-xl transition-all">
+          Exit Hub
+        </button>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <!-- Part 1: Radar Chart rendering -->
+        <div class="glass-panel p-6 rounded-3xl border border-white/10 shadow-lg flex flex-col items-center">
+          <h3 class="font-headline-md text-headline-md text-on-surface mb-2 self-start">Subject Area Mastery</h3>
+          <p class="text-xs text-on-surface-variant mb-6 self-start">Visual radar plot measuring your accuracy scores by category.</p>
+          <!-- Canvas for Radar Chart drawing -->
+          <div class="w-full aspect-square max-w-[360px] flex items-center justify-center relative">
+            <canvas id="analytics-radar-canvas" width="360" height="360" class="w-full h-full"></canvas>
+          </div>
+        </div>
+
+        <!-- Part 2: Heatmap grid mapping -->
+        <div class="glass-panel p-6 rounded-3xl border border-white/10 shadow-lg space-y-6">
+          <div>
+            <h3 class="font-headline-md text-headline-md text-on-surface mb-2">Cognitive Streak Mapping</h3>
+            <p class="text-xs text-on-surface-variant">Timeline tracing correct responses across your last 50 questions.</p>
+          </div>
+
+          <!-- Heatmap node map container -->
+          <div class="flex flex-col items-center gap-4 bg-[#020617] border border-white/5 p-6 rounded-2xl">
+            <!-- Heatmap grid -->
+            <div id="analytics-heatmap-grid" class="grid grid-cols-10 gap-3">
+              <!-- 50 grids drawn dynamically in app.js -->
+            </div>
+            
+            <div class="w-full flex justify-between items-center text-[10px] uppercase font-bold text-on-surface-variant tracking-wider mt-4">
+              <span>Timeline: Oldest</span>
+              <div class="flex gap-2 items-center">
+                <span>Color Key:</span>
+                <span class="w-2.5 h-2.5 rounded bg-white/10" title="Unplayed"></span>
+                <span class="w-2.5 h-2.5 rounded bg-red-500/80" title="Wrong"></span>
+                <span class="w-2.5 h-2.5 rounded bg-secondary" title="Correct"></span>
+              </div>
+              <span>Recent</span>
+            </div>
+          </div>
+
+          <!-- Stats list cards -->
+          <div class="grid grid-cols-2 gap-4">
+            <div class="bg-white/5 border border-white/10 p-4 rounded-2xl">
+              <span class="text-[9px] uppercase font-bold tracking-widest text-on-surface-variant">Peak Streak</span>
+              <p class="text-2xl font-bold text-secondary mt-1" id="analytics-stat-streak">0 Ans</p>
+              <span class="text-[9px] text-on-surface-variant mt-1 block">Consecutive correct plays</span>
+            </div>
+            <div class="bg-white/5 border border-white/10 p-4 rounded-2xl">
+              <span class="text-[9px] uppercase font-bold tracking-widest text-on-surface-variant">Cognitive Score</span>
+              <p class="text-2xl font-bold text-primary mt-1" id="analytics-stat-accuracy">0%</p>
+              <span class="text-[9px] text-on-surface-variant mt-1 block">Average accuracy tier</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 7. MULTIPLAYER LOBBY VIEW -->
+    <div id="view-lobby" class="view-section hidden container mx-auto px-margin-mobile md:px-margin-desktop py-12 max-w-[900px] text-center">
+      <div class="glass-modal max-w-3xl mx-auto p-8 rounded-3xl border border-white/15 text-center shadow-2xl relative">
+        <span class="text-xs uppercase font-bold text-secondary tracking-widest">Multiplayer Lobby</span>
+        <h2 class="font-display-lg text-headline-xl md:text-display-lg-mobile text-on-surface mt-2 mb-2">Game Pin: <span class="bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary font-mono" id="lobby-pin-display">000 000</span></h2>
+        
+        <p class="text-sm text-on-surface-variant mb-6" id="lobby-status-text">Waiting for players to join...</p>
+
+        <!-- QR Code + Share Link Panel -->
+        <div class="mb-6 p-5 rounded-2xl border border-secondary/30 text-left flex flex-col sm:flex-row gap-5 items-center" style="background: rgba(76,215,246,0.05);">
+          <!-- QR Code -->
+          <div class="shrink-0 text-center">
+            <img id="lobby-qr-code" src="" alt="QR Code" class="w-36 h-36 rounded-xl border border-white/10 bg-white p-1" />
+            <p class="text-[10px] text-secondary mt-2 font-bold uppercase tracking-wider">Scan to Join</p>
+          </div>
+          <!-- Share details -->
+          <div class="flex-1 min-w-0">
+            <p class="text-xs font-bold text-secondary uppercase tracking-widest mb-2">📡 Share this link with students</p>
+            <div class="flex gap-2 mb-3">
+              <input id="lobby-share-url" readonly class="flex-1 bg-[#020617] border border-white/10 rounded-xl px-3 py-2 text-xs font-mono text-secondary truncate focus:outline-none" value="Set public URL first" />
+              <button onclick="lobbyEngine.copyShareUrl()" class="px-4 py-2 bg-white/10 border border-white/10 rounded-xl text-xs font-bold hover:bg-white/20 transition-all shrink-0">Copy</button>
+            </div>
+            <p class="text-[11px] text-on-surface-variant mb-3">Students anywhere open this link → PIN is pre-filled → they click Join!</p>
+            <!-- Public URL setter -->
+            <div class="flex gap-2">
+              <input id="lobby-public-url-input" placeholder="Paste your tunnel URL (e.g. https://xyz.loca.lt)" class="flex-1 bg-[#020617] border border-white/10 rounded-xl px-3 py-2 text-xs font-mono text-on-surface focus:outline-none focus:border-secondary min-w-0" />
+              <button onclick="lobbyEngine.setPublicUrl()" class="px-4 py-2 bg-gradient-to-r from-primary to-secondary rounded-xl text-on-primary text-xs font-bold shrink-0 hover:opacity-90">Set URL</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Joined players list -->
+        <div class="bg-[#020617] border border-white/5 rounded-2xl p-6 mb-8 text-left">
+          <div class="flex justify-between items-center mb-4 border-b border-white/10 pb-2">
+            <span class="text-xs font-bold uppercase tracking-wider text-on-surface-variant" id="lobby-players-count">Players (0)</span>
+            <span class="text-[10px] text-secondary font-bold uppercase tracking-widest animate-pulse">Lobby Active</span>
+          </div>
+          <div id="lobby-players-grid" class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            <!-- Simulated player avatar chips pop in here -->
+          </div>
+        </div>
+
+        <div class="flex gap-4">
+          <button onclick="lobbyEngine.leave()" class="flex-1 py-3 border border-white/10 rounded-xl font-bold text-sm text-on-surface-variant hover:text-on-surface hover:bg-white/5 transition-all">
+            Leave Lobby
+          </button>
+          <button onclick="lobbyEngine.deleteLobby()" class="flex-1 py-3 border border-red-500/20 text-red-400 hover:bg-red-500/10 hover:border-red-500/30 rounded-xl font-bold text-sm transition-all duration-200">
+            Delete Lobby
+          </button>
+          <button id="lobby-start-btn" onclick="lobbyEngine.startGame()" class="flex-1 py-3 bg-gradient-to-r from-primary to-secondary text-on-primary font-bold text-sm rounded-xl hover:shadow-[0_0_20px_rgba(208,188,255,0.2)]">
+            Start Game
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 8. PODIUM STANDINGS VIEW -->
+    <div id="view-podium" class="view-section hidden container mx-auto px-margin-mobile md:px-margin-desktop py-12 max-w-[800px] text-center">
+      <div class="glass-modal max-w-2xl mx-auto p-8 rounded-3xl border border-white/15 text-center shadow-2xl relative">
+        <span class="text-xs uppercase font-bold text-primary tracking-widest">Global Standings</span>
+        <h2 class="font-headline-xl text-headline-xl font-bold text-on-surface mt-2 mb-8">Game Room Podium</h2>
+
+        <!-- Kahoot-style Podium columns container -->
+        <div class="flex items-end justify-center gap-4 sm:gap-8 h-64 mb-10 border-b border-white/10 pb-2 relative overflow-hidden">
+          
+          <!-- 2nd Place Column -->
+          <div class="flex flex-col items-center w-20 sm:w-28 transition-all duration-1000 ease-out translate-y-20 opacity-0" id="podium-col-2">
+            <span class="text-xs font-bold text-on-surface-variant truncate w-full text-center" id="podium-name-2">Player 2</span>
+            <span class="text-[10px] text-secondary font-bold mt-1" id="podium-score-2">0s (0/5)</span>
+            <div class="w-full bg-gradient-to-t from-secondary/10 to-secondary/30 border border-secondary/50 rounded-t-xl flex items-end justify-center font-bold text-secondary text-2xl h-24 mt-2 pb-2 shadow-[0_0_15px_rgba(76,215,246,0.1)]">
+              2
+            </div>
+          </div>
+
+          <!-- 1st Place Column -->
+          <div class="flex flex-col items-center w-24 sm:w-32 transition-all duration-1000 ease-out translate-y-20 opacity-0" id="podium-col-1">
+            <span class="text-sm font-bold text-primary truncate w-full text-center" id="podium-name-1">Player 1</span>
+            <span class="text-xs text-primary font-bold mt-1" id="podium-score-1">0s (0/5)</span>
+            <div class="w-full bg-gradient-to-t from-primary/10 to-primary/40 border-t-2 border-primary rounded-t-xl flex items-end justify-center font-bold text-primary text-4xl h-36 mt-2 pb-3 shadow-[0_0_25px_rgba(208,188,255,0.2)]">
+              1
+            </div>
+          </div>
+
+          <!-- 3rd Place Column -->
+          <div class="flex flex-col items-center w-20 sm:w-28 transition-all duration-1000 ease-out translate-y-20 opacity-0" id="podium-col-3">
+            <span class="text-xs font-bold text-on-surface-variant truncate w-full text-center" id="podium-name-3">Player 3</span>
+            <span class="text-[10px] text-tertiary font-bold mt-1" id="podium-score-3">0s (0/5)</span>
+            <div class="w-full bg-gradient-to-t from-tertiary/10 to-tertiary/30 border border-tertiary/50 rounded-t-xl flex items-end justify-center font-bold text-tertiary text-xl h-16 mt-2 pb-1 shadow-[0_0_15px_rgba(255,176,205,0.1)]">
+              3
+            </div>
+          </div>
+        </div>
+
+        <!-- Standings Table list -->
+        <div class="bg-[#020617] border border-white/5 rounded-2xl p-6 mb-8 text-left">
+          <h4 class="text-xs font-bold uppercase tracking-wider text-on-surface-variant mb-4 border-b border-white/10 pb-2">Full Room Rankings (Accuracy &amp; Speed)</h4>
+          <div class="space-y-2" id="podium-standings-list">
+            <!-- Full table of contestants -->
+          </div>
+        </div>
+
+        <button onclick="lobbyEngine.leave()" class="w-full py-3 bg-gradient-to-r from-primary to-secondary text-on-primary font-bold text-sm rounded-xl shadow-lg">
+          Return to Dashboard
+        </button>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-surface-container-lowest py-20 border-t border-white/5 mt-auto relative z-10">
+    <div class="container mx-auto px-margin-mobile md:px-margin-desktop grid grid-cols-1 md:grid-cols-4 gap-12 text-left">
+      <div class="col-span-1">
+        <div class="flex items-center gap-2 mb-6">
+          <span class="material-symbols-outlined text-primary text-2xl">share</span>
+          <span class="font-headline-md text-headline-md font-bold text-on-surface">QuizSphere</span>
+        </div>
+        <p class="text-body-sm text-on-surface-variant mb-6">Redefining the competitive knowledge landscape with high-performance technology and interactive design.</p>
+        <div class="flex gap-4">
+          <a class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-primary/20 transition-colors text-on-surface text-xl" href="#" onclick="alert('Stay Tuned!')">
+            <span class="material-symbols-outlined text-xl">alternate_email</span>
+          </a>
+          <a class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-primary/20 transition-colors text-on-surface text-xl" href="#" onclick="alert('Join the sphere!')">
+            <span class="material-symbols-outlined text-xl">public</span>
+          </a>
+        </div>
+      </div>
+      <div>
+        <h5 class="text-on-surface font-bold mb-6 uppercase tracking-wider text-label-md">Platform</h5>
+        <ul class="space-y-4">
+          <li><a class="text-on-surface-variant hover:text-primary transition-colors text-body-sm" href="#" onclick="alert('Global Leagues page coming soon!')">Global Leagues</a></li>
+          <li><a class="text-on-surface-variant hover:text-primary transition-colors text-body-sm" href="#" onclick="alert('Live Events starting weekly!')">Live Events</a></li>
+          <li><a class="text-on-surface-variant hover:text-primary transition-colors text-body-sm" href="#" onclick="router.navigate('creator')">Creator Studio</a></li>
+          <li><a class="text-on-surface-variant hover:text-primary transition-colors text-body-sm" href="#" onclick="alert('Store items unlocking in Level 5')">Store</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5 class="text-on-surface font-bold mb-6 uppercase tracking-wider text-label-md">Support</h5>
+        <ul class="space-y-4">
+          <li><a class="text-on-surface-variant hover:text-primary transition-colors text-body-sm" href="#" onclick="alert('API docs and guide sheets coming soon.')">Documentation</a></li>
+          <li><a class="text-on-surface-variant hover:text-primary transition-colors text-body-sm" href="#" onclick="alert('FAQ base active inside Discord.')">Help Center</a></li>
+          <li><a class="text-on-surface-variant hover:text-primary transition-colors text-body-sm" href="#" onclick="alert('Privacy policies are active.')">Privacy Policy</a></li>
+          <li><a class="text-on-surface-variant hover:text-primary transition-colors text-body-sm" href="#" onclick="alert('Standard SaaS TOS applied.')">Terms of Service</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5 class="text-on-surface font-bold mb-6 uppercase tracking-wider text-label-md">Stay Connected</h5>
+        <p class="text-body-sm text-on-surface-variant mb-4">Get the latest updates on new features and seasonal leagues.</p>
+        <div class="relative">
+          <input class="w-full bg-surface border border-white/10 rounded-xl px-4 py-3 text-body-sm focus:outline-none focus:border-primary text-on-surface" placeholder="Enter email" type="email" id="footer-newsletter-email"/>
+          <button class="absolute right-2 top-2 p-1.5 bg-primary rounded-lg text-on-primary flex items-center justify-center" onclick="alert('Newsletter subscribed!')">
+            <span class="material-symbols-outlined text-sm">arrow_forward</span>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="container mx-auto px-margin-mobile md:px-margin-desktop mt-20 pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4">
+      <p class="text-label-md text-on-surface-variant">© 2024 QuizSphere Inc. All rights reserved.</p>
+      <div class="flex gap-8">
+        <span class="text-label-md text-on-surface-variant">Built for High Performance</span>
+        <span class="text-label-md text-on-surface-variant">Zero-Latency Sync</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Bottom Nav for Mobile Screens -->
+  <div class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center h-16 pb-safe md:hidden bg-surface/80 backdrop-blur-lg border-t border-white/10 shadow-[0_-4px_12px_rgba(0,0,0,0.5)]">
+    <a class="flex flex-col items-center justify-center text-primary text-xs cursor-pointer" onclick="router.navigate('dashboard')">
+      <span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">play_circle</span>
+      <span class="font-label-md text-[9px] uppercase font-bold">Play</span>
+    </a>
+    <a class="flex flex-col items-center justify-center text-on-surface-variant text-xs cursor-pointer" onclick="router.navigate('creator')">
+      <span class="material-symbols-outlined text-[20px]">handyman</span>
+      <span class="font-label-md text-[9px] uppercase font-bold">Create</span>
+    </a>
+    <a class="flex flex-col items-center justify-center text-on-surface-variant text-xs cursor-pointer" onclick="router.navigate('analytics')">
+      <span class="material-symbols-outlined text-[20px]">monitoring</span>
+      <span class="font-label-md text-[9px] uppercase font-bold">Stats</span>
+    </a>
+    <a class="flex flex-col items-center justify-center text-on-surface-variant text-xs cursor-pointer" onclick="router.navigate('auth', {mode: 'login'})" id="mobile-auth-btn">
+      <span class="material-symbols-outlined text-[20px]">person</span>
+      <span class="font-label-md text-[9px] uppercase font-bold" id="mobile-auth-lbl">Log In</span>
+    </a>
+  </div>
+
+  <!-- Primary Application Script -->
+  <script src="app-v1.js?v=5"></script>
+</body>
+</html>
